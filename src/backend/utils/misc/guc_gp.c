@@ -4355,7 +4355,7 @@ struct config_int ConfigureNamesInt_gp[] =
 			NULL,
 		},
 		&gp_max_shmem_instruments,
-		30000, 0, 1048576, NULL, NULL
+		30000, 0, 131072, NULL, NULL
 	},
 
 	{

@@ -3,8 +3,7 @@
  * query_metrics.h
  *	  Definitions for query metrics struct and functions
  *
- * Portions Copyright (c) 2010, Greenplum inc
- * Portions Copyright (c) 2012-Present Pivotal Software, Inc.
+ * Portions Copyright (c) 2017-Present Pivotal Software, Inc.
  *
  *
  * IDENTIFICATION

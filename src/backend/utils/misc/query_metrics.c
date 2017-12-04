@@ -1,16 +1,15 @@
 /*-------------------------------------------------------------------------
  *
- * metrics.c
+ * query_metrics.c
  *    Functions for sending query metrics packets
  *
  *  Created on: Oct 11, 2017
- *      Author: Hao Wang & Teng Zhang
  *
- * Portions Copyright (c) 2012-Present Pivotal Software, Inc.
+ * Portions Copyright (c) 2017-Present Pivotal Software, Inc.
  *
  *
  * IDENTIFICATION
- *	    src/backend/utils/misc/metrics.c
+ *	    src/backend/utils/misc/query_metrics.c
  *
  *-------------------------------------------------------------------------
 */

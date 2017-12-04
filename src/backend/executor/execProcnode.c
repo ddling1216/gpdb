@@ -850,7 +850,8 @@ ExecInitNode(Plan *node, EState *estate, int eflags)
 				 * plan with many SCAN nodes under a APPEND node. If the number of
 				 * partitions are too many, this plan will occupy too many slots.
 				 * Here is a limitation on number of shmem slots used by scan nodes
-				 * for each backend.
+				 * for each backend.Instruments exceeding the limitation are allocated
+				 * in local memory.
 				 */
 				if (scan_node_counter >= MAX_SCAN_ON_SHMEM)
 				{

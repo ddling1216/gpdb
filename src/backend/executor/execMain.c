@@ -5954,7 +5954,7 @@ InitNodeMetrics_walker(Node *node, InitNodeMetricsContext *context)
 	if (node == NULL)
 		return false;
 
-	if(is_plan_node(node))
+	if (is_plan_node(node))
 	{
 		ctx = (InitNodeMetricsContext*) palloc0(sizeof(InitNodeMetricsContext));
 		ctx->base = context->base;

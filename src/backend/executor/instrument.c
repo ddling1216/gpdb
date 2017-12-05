@@ -250,34 +250,17 @@ InstrShmemPick(Plan *plan, int eflags, int instrument_options)
 
 /*
  * Recycle the Instrumentation back to Shmem free list
- *  - Node finished normally, should recycle in ExecEndNode
- *  - Query abort or error, should recycle in mppExecutorCleanup
- *  - Fatal error should recycle in proc_exit_prepare
  */
-static Instrumentation *
-InstrShmemRecycle(Instrumentation *instr)
+static void 
+InstrShmemRecycle(InstrumentationSlot* slot)
 {
-	InstrumentationSlot *slot;
-	Instrumentation *clone = NULL;
+	Instrumentation *instr;
+	instr = &(slot->data);
 
 	if (NULL == instr || NULL == InstrumentGlobal || !instr->in_shmem)
-		return instr;
+		return ;
 
 	/* Recycle Instrumentation slot back to the free list */
-	slot = (InstrumentationSlot *) instr;
-
-	if (slot->eflags & EXEC_FLAG_EXPLAIN_ANALYZE)
-	{
-		/*
-		 * When EXPLAIN ANALYZE encontered an error, we can't set instrument
-		 * to NULL because it is needed in ExplainOnePlan, so migrate it to
-		 * local memory and recycle the slot on Shmem
-		 */
-		clone = (Instrumentation *) palloc0(sizeof(Instrumentation));
-		memcpy(clone, instr, sizeof(Instrumentation));
-		clone->in_shmem = false;
-	}
-
 	memset(slot, PATTERN, sizeof(InstrumentationSlot));
 
 	SpinLockAcquire(&InstrumentGlobal->lock);
@@ -288,8 +271,6 @@ InstrShmemRecycle(Instrumentation *instr)
 	InstrumentGlobal->used--;
 
 	SpinLockRelease(&InstrumentGlobal->lock);
-
-	return clone;
 }
 
 /*
@@ -304,7 +285,7 @@ InstrShmemRecycleCallback(ResourceReleasePhase phase, bool isCommit, bool isTopL
 	foreach(cell, slotsOccupied)
 	{
 		slot = lfirst(cell);
-		InstrShmemRecycle(&(slot->data));
+		InstrShmemRecycle(slot);
 	}
 	list_free(slotsOccupied);
 	slotsOccupied = NIL;
